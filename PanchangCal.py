@@ -16,6 +16,8 @@ class PanchangCal:
     
     def addEvent(self, name, description, startTime, endTime):
         event = Event()
+        startTime = self.adjustTime(startTime)
+        endTime = self.adjustTime(endTime)
         try:
             event.add('summary', name)
             event.add('description', description)
@@ -24,8 +26,6 @@ class PanchangCal:
             self.cal.add_component(event)
         except Exception as e:
             print(e)
-        
-
 
     def writeCal(self):
         directory = Path.cwd() / 'calendar'
@@ -128,9 +128,40 @@ class PanchangCal:
                     if prop in params:
                         value = description[prop]
                         if value != "none":
-                            print(value)
+                            # print(value)
                             start_time, end_time = value.split('-')
                             startHour, startMinute, startSecond = map(int, start_time.split(':'))
                             endHour, endMinute, endSecond = map(int, end_time.split(':'))
 
                             self.addEvent(mappings[prop], prop, {"year": year, "month": i, "day": day, "hour": startHour, "minute": startMinute, "second": startSecond}, {"year": 2023, "month": i, "day": day, "hour": endHour, "minute": endMinute, "second": endSecond})
+
+    def isLeapYear(self, year):
+        return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+
+    def adjustTime(self, time):
+        days_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        if self.isLeapYear(time['year']):
+            days_in_month[2] = 29
+
+        while time['second'] >= 60:
+            time['second'] -= 60
+            time['minute'] += 1
+        
+        while time['minute'] >= 60:
+            time['minute'] -= 60
+            time['hour'] += 1
+        
+        while time['hour'] >= 24:
+            time['hour'] -= 24
+            time['day'] += 1
+            
+            if time['day'] > days_in_month[time['month']]:
+                time['day'] = 1
+                time['month'] += 1
+
+                if time['month'] > 12:
+                    time['month'] = 1
+                    time['year'] += 1
+
+        return time
