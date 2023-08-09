@@ -1,0 +1,7 @@
+.fc-event {
+    background-color: green;
+}
+
+.fc-event:hover {
+    background-color: blue;
+}
