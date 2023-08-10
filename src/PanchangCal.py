@@ -1,5 +1,5 @@
 # imports
-from icalendar import Calendar, Event, vCalAddress, vText
+from icalendar import Calendar, Event
 import json
 from datetime import datetime
 from pathlib import Path
@@ -8,21 +8,43 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-# global allEvents
-# global eventGuid
-
-allEvents = []
-eventGuid = 0
-
 class PanchangCal:
     def __init__(self, calName):
         self.calName = calName
         self.cal = Calendar()
-        self.cal.add('prodid', '-//My calendar product//example.com//')
-        self.cal.add('version', '2.0')
+        self.cal.add('prodid', '-//Panchang Calendar//panchang-cal.vercel.app///')
+        self.cal.add('version', '1.0')
         self.eventGuid = 0
         self.allEvents = []
     
+    def pingYear(self, year):
+        url = "http://www.mypanchang.com/calformat.php"
+        params = {
+            "cityname": "Toronto-ON-Canada",
+            "yr": str(year),
+            "mn": "1",
+            "monthtype": "0"
+        }
+        response = requests.get(url, params=params)
+
+        if "File not found" not in response.text:
+            return True
+        else:
+            return False
+        
+    def getValidYears(self):
+        currentYear = 2017
+        validYears = []
+
+        while True:
+            if self.pingYear(currentYear):
+                validYears.append(currentYear)
+            else:
+                break
+            currentYear += 1
+
+        return validYears
+
     def isGoodEvent(self, name):
         mappings = {
             "Rahu Kalam": False,
@@ -40,8 +62,8 @@ class PanchangCal:
         event = Event()
         startTime = self.adjustTime(startTime)
         endTime = self.adjustTime(endTime)
-        try:
 
+        try:
             startDateTime = datetime(
                 startTime["year"],
                 startTime["month"],
@@ -67,13 +89,9 @@ class PanchangCal:
                 "end": endDateTime.isoformat(),
                 "color": "darkgreen" if self.isGoodEvent(name) else "darkred"
             }
-            # print(startDateTime.isoformat())``
             self.allEvents.append(eventObj)
 
             self.eventGuid += 1
-
-            # print(self.allEvents)
-
 
             event.add('summary', name)
             event.add('description', description)
@@ -84,7 +102,7 @@ class PanchangCal:
             print(e)
 
     def writeCal(self):
-        directory = Path.cwd() / 'calendar'
+        directory = Path.cwd() / 'client' / 'src' / 'assets' / 'ics'
         try:
             directory.mkdir(parents=True, exist_ok=False)
         except FileExistsError:
@@ -160,7 +178,7 @@ class PanchangCal:
 
         return month
 
-    def loop(self, year):
+    def run(self, year):
         params = [
             "RK", "YM", "GK", "AJ", "DM", "DM_1", "V", "V_1", "AK"
         ]
@@ -184,7 +202,6 @@ class PanchangCal:
                     if prop in params:
                         value = description[prop]
                         if value != "none":
-                            # print(value)
                             start_time, end_time = value.split('-')
                             startHour, startMinute, startSecond = map(int, start_time.split(':'))
                             endHour, endMinute, endSecond = map(int, end_time.split(':'))
@@ -205,8 +222,7 @@ class PanchangCal:
                                     "second": endSecond
                                 }
                             )
-        print(self.allEvents)
-        with open('convert.txt', 'w') as convert_file:
+        with open('./client/src/assets/Events.json', 'w') as convert_file:
             convert_file.write(json.dumps(self.allEvents))
 
     def isLeapYear(self, year):
