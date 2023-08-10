@@ -4,7 +4,7 @@ body,
 body > div { /* the react root */
   margin: 0;
   padding: 0;
-  /* height: 100%; */
+  font-family: "Calibri", sans-serif;
 }
 
 h2 {
