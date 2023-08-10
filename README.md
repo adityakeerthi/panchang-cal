@@ -8,8 +8,9 @@ Current Panchang needs to be read by astrologers who have a deep understanding o
 - [x] Scrape [mypanchang](https://mypanchang.com/) and parse data
 - [x] Handle invalid times (e.g. 25:05:23)
 - [ ] Generate a web-client for custom configurations 
-- [ ] Color-code the almanac to indicate good/bad times
-- [ ] Visualize calendar instead of using Google or Apple client
+- [x] Color-code the almanac to indicate good/bad times
+- [x] Visualize calendar instead of using Google or Apple client
+- [ ] Develop a pipeline/design to connect Python code and web client
 
 ## Stack
 - Python
