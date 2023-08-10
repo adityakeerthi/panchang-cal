@@ -102,7 +102,7 @@ class PanchangCal:
             print(e)
 
     def writeCal(self):
-        directory = Path.cwd() / 'client' / 'src' / 'assets' / 'ics'
+        directory = Path.cwd() / 'client' / 'public' / 'ics'
         try:
             directory.mkdir(parents=True, exist_ok=False)
         except FileExistsError:

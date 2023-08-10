@@ -7,9 +7,9 @@ import INITIAL_EVENTS from "../assets/Events.json"
 export default class Calendar extends React.Component {
   render() {
     return (
-      <div className='demo-app'>
+      <div className='calendar-container'>
         {this.renderSidebar()}
-        <div className='demo-app-main'>
+        <div className='calendar-container-main'>
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin]}
             headerToolbar={{
@@ -34,19 +34,26 @@ export default class Calendar extends React.Component {
 
   renderSidebar() {
     return (
-      <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
+      <div className='calendar-container-sidebar'>
+        <div className='calendar-container-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
             <li>View this almanac to note auspicious times</li>
             <li>Green represents good times, red represents bad times</li>
           </ul>
         </div>
-        <div className='demo-app-sidebar-section'>
+        <div className='calendar-container-sidebar-section'>
           <h2>Panchang Calendar</h2>
           <ul>
             <li>View source code <a target="_blank" href="https://github.com/adityakeerthi/panchang-cal">here</a> </li>
             <li>Times imported from <a target="_blank" href="https://mypanchang.com/">myPanchang</a> </li>
+          </ul>
+        </div>
+        <div className='calendar-container-sidebar-section'>
+          <h2>Add to calendar</h2>
+          <button onClick={this.handleDownload}>Download File</button>
+          <ul>
+            <li>View source code <a target="_blank" href="https://github.com/adityakeerthi/panchang-cal">here</a> </li>
           </ul>
         </div>
       </div>
@@ -63,6 +70,10 @@ export default class Calendar extends React.Component {
     })
   }
 
+  handleDownload = () => {
+    const fileUrl = process.env.PUBLIC_URL + '/ics/Panchang 1.0.ics';
+    window.open(fileUrl, '_blank');
+  }
 }
 
 function renderEventContent(eventInfo) {
@@ -72,13 +83,5 @@ function renderEventContent(eventInfo) {
       <br />
       <b>{eventInfo.event.title}</b>
     </>
-  )
-}
-
-function renderSidebarEvent(event) {
-  return (
-    <li key={event.id}>
-      <i>{event.title}</i>
-    </li>
   )
 }
