@@ -11,6 +11,7 @@ Current Panchang needs to be read by astrologers who have a deep understanding o
 - [x] Color-code the almanac to indicate good/bad times
 - [x] Visualize calendar instead of using Google or Apple client
 - [x] Develop a pipeline/design to connect Python code and web client
+- [ ] Add more options for parameters on data scraped
 
 ## Stack
 - Python

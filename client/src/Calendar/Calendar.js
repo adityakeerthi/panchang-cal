@@ -52,9 +52,6 @@ export default class Calendar extends React.Component {
         <div className='calendar-container-sidebar-section'>
           <h2>Add to calendar</h2>
           <button onClick={this.handleDownload}>Download File</button>
-          <ul>
-            <li>View source code <a target="_blank" href="https://github.com/adityakeerthi/panchang-cal">here</a> </li>
-          </ul>
         </div>
       </div>
     )
