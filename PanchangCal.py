@@ -1,5 +1,6 @@
 # imports
 from icalendar import Calendar, Event, vCalAddress, vText
+import json
 from datetime import datetime
 from pathlib import Path
 import os
@@ -7,22 +8,77 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+# global allEvents
+# global eventGuid
+
+allEvents = []
+eventGuid = 0
+
 class PanchangCal:
     def __init__(self, calName):
         self.calName = calName
         self.cal = Calendar()
         self.cal.add('prodid', '-//My calendar product//example.com//')
         self.cal.add('version', '2.0')
+        self.eventGuid = 0
+        self.allEvents = []
     
+    def isGoodEvent(self, name):
+        mappings = {
+            "Rahu Kalam": False,
+            "Yama Gandam": False,
+            "Gulika Kalam": False,
+            "Abhijit Muhurta": True,
+            "Durmuhurtham": False,
+            "Varjyam": False,
+            "Amrit Kalam": True
+        }
+
+        return mappings[name]
+
     def addEvent(self, name, description, startTime, endTime):
         event = Event()
         startTime = self.adjustTime(startTime)
         endTime = self.adjustTime(endTime)
         try:
+
+            startDateTime = datetime(
+                startTime["year"],
+                startTime["month"],
+                startTime["day"],
+                startTime["hour"],
+                startTime["minute"],
+                startTime["second"]
+            )
+
+            endDateTime = datetime(
+                endTime["year"],
+                endTime["month"],
+                endTime["day"],
+                endTime["hour"],
+                endTime["minute"],
+                endTime["second"]
+            )
+
+            eventObj = {
+                "id": self.eventGuid,
+                "title": name,
+                "start": startDateTime.isoformat(),
+                "end": endDateTime.isoformat(),
+                "color": "darkgreen" if self.isGoodEvent(name) else "darkred"
+            }
+            # print(startDateTime.isoformat())``
+            self.allEvents.append(eventObj)
+
+            self.eventGuid += 1
+
+            # print(self.allEvents)
+
+
             event.add('summary', name)
             event.add('description', description)
-            event.add('dtstart', datetime(startTime["year"], startTime["month"], startTime["day"], startTime["hour"], startTime["minute"], startTime["second"]))
-            event.add('dtend', datetime(endTime["year"], endTime["month"], endTime["day"], endTime["hour"], endTime["minute"], endTime["second"]))
+            event.add('dtstart', startDateTime)
+            event.add('dtend', endDateTime)
             self.cal.add_component(event)
         except Exception as e:
             print(e)
@@ -133,7 +189,25 @@ class PanchangCal:
                             startHour, startMinute, startSecond = map(int, start_time.split(':'))
                             endHour, endMinute, endSecond = map(int, end_time.split(':'))
 
-                            self.addEvent(mappings[prop], prop, {"year": year, "month": i, "day": day, "hour": startHour, "minute": startMinute, "second": startSecond}, {"year": 2023, "month": i, "day": day, "hour": endHour, "minute": endMinute, "second": endSecond})
+                            self.addEvent(mappings[prop], prop, {
+                                    "year": year, 
+                                    "month": i, 
+                                    "day": day, 
+                                    "hour": startHour, 
+                                    "minute": startMinute, 
+                                    "second": startSecond
+                                }, {
+                                    "year": year, 
+                                    "month": i, 
+                                    "day": day, 
+                                    "hour": endHour, 
+                                    "minute": endMinute, 
+                                    "second": endSecond
+                                }
+                            )
+        print(self.allEvents)
+        with open('convert.txt', 'w') as convert_file:
+            convert_file.write(json.dumps(self.allEvents))
 
     def isLeapYear(self, year):
         return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)

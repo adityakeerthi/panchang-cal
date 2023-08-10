@@ -6,7 +6,7 @@ Current Panchang needs to be read by astrologers who have a deep understanding o
 
 ## Todo
 - [x] Scrape [mypanchang](https://mypanchang.com/) and parse data
-- [ ] Handle invalid times (e.g. 25:05:23)
+- [x] Handle invalid times (e.g. 25:05:23)
 - [ ] Generate a web-client for custom configurations 
 - [ ] Color-code the almanac to indicate good/bad times
 - [ ] Visualize calendar instead of using Google or Apple client
