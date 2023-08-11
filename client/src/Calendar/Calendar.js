@@ -43,15 +43,23 @@ export default class Calendar extends React.Component {
           </ul>
         </div>
         <div className='calendar-container-sidebar-section'>
-          <h2>Panchang Calendar</h2>
+          <h2>Legend</h2>
           <ul>
-            <li>View source code <a target="_blank" href="https://github.com/adityakeerthi/panchang-cal">here</a> </li>
-            <li>Times imported from <a target="_blank" href="https://mypanchang.com/">myPanchang</a> </li>
+            <li>RK: Rahu Kalam</li>
+            <li>YM: Yama Gandam</li>
+            <li>GK: Gulika Kalam</li>
+            <li>AJ: Abhijit Muhurta</li>
+            <li>DM: Durmuhurtham</li>
+            <li>V: Varjyam</li>
+            <li>AK: Amrit Kalam</li>
           </ul>
         </div>
         <div className='calendar-container-sidebar-section'>
-          <h2>Add to calendar</h2>
-          <button onClick={this.handleDownload}>Download File</button>
+          <h2>Panchang Calendar</h2>
+          <ul>
+            <li>Download calendar <a className='download-button' onClick={this.handleDownload}>here</a> </li>
+            <li>Times imported from <a target="_blank" href="https://mypanchang.com/">myPanchang</a> </li>
+          </ul>
         </div>
       </div>
     )

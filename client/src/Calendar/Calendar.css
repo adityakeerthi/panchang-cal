@@ -53,3 +53,12 @@ b { /* used for event dates/times */
   max-width: 1100px;
   margin: 0 auto;
 }
+
+.download-button {
+  text-decoration: underline;
+  color: blue;
+}
+
+.download-button:hover {
+  cursor: pointer;
+}

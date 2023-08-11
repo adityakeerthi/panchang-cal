@@ -47,13 +47,20 @@ class PanchangCal:
 
     def isGoodEvent(self, name):
         mappings = {
-            "Rahu Kalam": False,
-            "Yama Gandam": False,
-            "Gulika Kalam": False,
-            "Abhijit Muhurta": True,
-            "Durmuhurtham": False,
-            "Varjyam": False,
-            "Amrit Kalam": True
+            # "Rahu Kalam": False,
+            # "Yama Gandam": False,
+            # "Gulika Kalam": False,
+            # "Abhijit Muhurta": True,
+            # "Durmuhurtham": False,
+            # "Varjyam": False,
+            # "Amrit Kalam": True
+            "RK": False,
+            "YM": False,
+            "GK": False,
+            "AJ": True,
+            "DM": False,
+            "V": False,
+            "AK": True
         }
 
         return mappings[name]
@@ -183,15 +190,15 @@ class PanchangCal:
             "RK", "YM", "GK", "AJ", "DM", "DM_1", "V", "V_1", "AK"
         ]
         mappings = {
-            "RK": "Rahu Kalam",
-            "YM": "Yama Gandam",
-            "GK": "Gulika Kalam",
-            "AJ": "Abhijit Muhurta",
-            "DM": "Durmuhurtham",
-            "DM_1": "Durmuhurtham",
-            "V": "Varjyam",
-            "V_1": "Varjyam",
-            "AK": "Amrit Kalam"
+            "RK": "RK",
+            "YM": "YM",
+            "GK": "GK",
+            "AJ": "AJ",
+            "DM": "DM",
+            "DM_1": "DM",
+            "V": "V",
+            "V_1": "V",
+            "AK": "AK"
         }
         for i in range(1, 13):
             monthData = self.getMonthData(year, i)
@@ -206,7 +213,7 @@ class PanchangCal:
                             startHour, startMinute, startSecond = map(int, start_time.split(':'))
                             endHour, endMinute, endSecond = map(int, end_time.split(':'))
 
-                            self.addEvent(mappings[prop], prop, {
+                            self.addEvent(mappings[prop], "", {
                                     "year": year, 
                                     "month": i, 
                                     "day": day, 
